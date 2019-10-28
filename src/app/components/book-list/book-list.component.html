@@ -1,0 +1,58 @@
+<div class="container">
+<div class="row justify-content-center"> 
+    <h3> Available Books in {{ libraryName  }} </h3>
+</div>
+<p class="d-flex justify-content-center" *ngIf="!bookList"><em>Loading...</em></p>  
+
+<table class='table table-striped table-bordered table-hover' *ngIf="bookList">  
+    <thead class="thead-dark">  
+        <tr>  
+            <th>#</th>
+            <th>Title</th>
+            <th>ISBN</th>  
+            <th>DateOfPublication</th>
+            <th>Action</th>  
+        </tr>  
+    </thead>  
+    <tbody>  
+        <tr *ngFor="let book of bookList; let i=index"> 
+          <td>{{i+1}}</td> 
+          <td>{{ book.title}}</td>  
+          <td>{{ book.isbn }}</td> 
+          <td>{{ book.dateOfPublication | date: 'dd/MM/yyyy' }}</td> 
+          <td>  
+            <button class="btn btn-info" (click)="open(content , book)">Sign out</button>   
+          </td> 
+        </tr>  
+    </tbody>  
+</table>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Sign out</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="myForm">
+        <div class="form-group">
+          <label for="memberId">MemberId</label>
+          <input type="text" 
+          class="form-control"
+          formControlName="memberId" />
+        </div>
+      </form>
+      <ngb-alert *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">
+        You already have this book !</ngb-alert>
+      <ngb-alert *ngIf="!memberNotValid" [type]="'warning'" (close)="memberNotValid = true">
+            Member is not valid !</ngb-alert>
+      <ngb-alert *ngIf="!success" [type]="'primary'" (close)="success = true">
+                Congratulation ! you sign out the book</ngb-alert>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="sendSignOutRequest()">Send</button>
+    </div>
+  </ng-template>
